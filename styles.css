@@ -1,0 +1,21 @@
+header {
+    color: black;
+    font-size: x-large;
+    text-align: center;
+}
+
+.main{
+    color: black;
+    background-color: white;
+    padding-left: 150px;
+    padding-right: 150px;
+}
+
+.box{
+    background-color: rgb(255, 217, 168);
+    border: 5px solid black;
+    border-radius: 10px;
+    display: inline-block;
+    text-align: center;
+    padding: 0px;
+}
