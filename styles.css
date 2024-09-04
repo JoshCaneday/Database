@@ -1,7 +1,15 @@
-header {
-    color: black;
+.header {
+    color: white;
+    background-color: #0033A0;
+    display: inline-block;
+    border: 5px solid black;
     font-size: x-large;
     text-align: center;
+    position: fixed;
+    top: 0;
+    z-index: 0;
+    width: 92%;
+    margin-left: 3%;
 }
 
 .main{
@@ -9,13 +17,18 @@ header {
     background-color: white;
     padding-left: 150px;
     padding-right: 150px;
+    margin-top: 15vh;
+    height: 20vh;
 }
 
 .box{
-    background-color: rgb(255, 217, 168);
+    background-color: #F5F5DC;
     border: 5px solid black;
     border-radius: 10px;
     display: inline-block;
     text-align: center;
-    padding: 0px;
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+    padding-bottom: 1vh;
 }
