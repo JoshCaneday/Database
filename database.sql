@@ -1,8 +1,10 @@
 use ucsd_classes;
-drop table prereqs;
-drop table courses;
-drop table professors;
-drop table departments;
+
+
+drop table if exists prereqs;
+drop table if exists courses;
+drop table if exists professors;
+drop table if exists departments;
 
 drop procedure if exists InsertDepartments;
 drop procedure if exists InsertProfessors;
@@ -83,7 +85,7 @@ where c.department_id = d.department_id and c.is_offered_fall_2024 = true and d.
 
 -- If user wants to see all prerequiste courses for the couse with the id of 3 (done manually but will need to be automated), also they wont choose
 -- id of 3, they will chose the course and the course name will be mapped to the respective id
--- All prerequisites of COGS 118B
+-- All prerequisites of COGS 118B (respective course id)
 select d.department_acronym as "Department", c.course_name as "Prerequisite Course", c.course_number as "#"
 from courses c join prereqs p join departments d where d.department_id = c.department_id and p.course_prereq_id = c.course_id and p.course_id = 20;
 
@@ -6596,13 +6598,5 @@ values
 (57,230),(57,249),(57,254),
 (58,6),(58,228),(58,7),(58,229),(58,24),(58,177),(58,231),(58,247),(58,250),(58,237),(58,233),(58,238),
 (58,230),(58,249),(58,254),(59,20),(59,21),(60,62),(61,20),(61,21),(61,228),(61,233),(61,238),(61,229),
-(62,20),(62,21),(63,62),(64,62),(65,101),(65,6),(65,226),(65,77),(65,82),(67,29),(67,65),(67,111),
-
-(1,2),(1,2),(1,2),(1,2),(1,2),(1,2),(1,2),(1,2),(1,2),(1,2),(1,2),(1,2),(1,2),(1,2),(1,2),(1,2),(1,2),(1,2),
-(1,2),(1,2),(1,2),(1,2),(1,2),(1,2),(1,2),(1,2),(1,2),(1,2),(1,2),(1,2),(1,2),(1,2),(1,2),(1,2),(1,2),(1,2),
-(5,2);
+(62,20),(62,21),(63,62),(64,62),(65,101),(65,6),(65,226),(65,77),(65,82),(67,29),(67,65),(67,111);
 end //
-
-
-
-
