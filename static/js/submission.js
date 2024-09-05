@@ -18,7 +18,12 @@ document.addEventListener("DOMContentLoaded", () =>{
     }
     if (professor_name){
         document.getElementById('professor_name').textContent = `Professor Name: ${professor_name}`;
-        user_input = user_input + "p.prof_name," + profess_name + ",";
+        user_input = user_input + "p.prof_name," + professor_name + ",";
+        should_fetch = true;
+    }
+    if (offered_fall_2024){
+        document.getElementById('offered_fall_2024').textContent = `Fall 2024: ${offered_fall_2024}`;
+        user_input = user_input + "c.is_offered_fall_2024," + offered_fall_2024 + ",";
         should_fetch = true;
     }
     if (should_fetch) {

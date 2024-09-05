@@ -18,12 +18,15 @@ def get_data():
                 c.course_number AS '#', 
                 p.prof_first_name  AS 'First Name', 
                 p.prof_last_name AS 'Last Name' 
-                FROM courses c JOIN departments d JOIN professors p 
-                WHERE c.department_id = d.department_id AND c.fall_2024_prof_id = p.prof_id
+                FROM departments d JOIN courses c LEFT JOIN professors p ON c.fall_2024_prof_id = p.prof_id
+                WHERE c.department_id = d.department_id
             '''
     addQuery = user_input.split(',')
     for i in range(0,len(addQuery)-1,2):
-        query += " AND " + addQuery[i] + " = '" + addQuery[i+1] + "'"
+        if addQuery[i] != "c.is_offered_fall_2024":
+            query += " AND " + addQuery[i] + " = '" + addQuery[i+1] + "'"
+        elif addQuery[i+1] == 'true':
+            query += " AND " + addQuery[i] + " = true"
     query += ";"
     print(query)
 

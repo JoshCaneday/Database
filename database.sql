@@ -101,7 +101,13 @@ or (p.prof_first_name = "Joseph Gibbs" and p.prof_last_name = "Politz"));
 select p.prof_first_name as "First Name", p.prof_last_name as "Last Name" from professors p join courses c where p.prof_id = c.fall_2024_prof_id;
 
 
+select d.department_acronym as "Department", c.course_name as "Course Name", c.course_number as "#" , p.prof_first_name  as "First Name",
+p.prof_last_name as "Last Name" from courses c join departments d join professors p
+where c.department_id = d.department_id and c.fall_2024_prof_id = p.prof_id and c.is_offered_fall_2024 = true and d.department_acronym = "CSE";
 
+select d.department_acronym as "Department", c.course_name as "Course Name", c.course_number as "#" , p.prof_first_name  as "First Name",
+p.prof_last_name as "Last Name" from departments d join courses c left join professors p on c.fall_2024_prof_id = p.prof_id
+where c.department_id = d.department_id and c.is_offered_fall_2024 = true;
 
 
 
@@ -6600,3 +6606,7 @@ values
 (58,230),(58,249),(58,254),(59,20),(59,21),(60,62),(61,20),(61,21),(61,228),(61,233),(61,238),(61,229),
 (62,20),(62,21),(63,62),(64,62),(65,101),(65,6),(65,226),(65,77),(65,82),(67,29),(67,65),(67,111);
 end //
+
+
+
+
