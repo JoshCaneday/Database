@@ -7,7 +7,6 @@ from flask import Flask, render_template, jsonify, request
 
 app = Flask(__name__)
 
-# Example of a route that serves data
 @app.route('/get_data', methods=['POST'])
 def get_data():
     reqData = request.json;
@@ -28,7 +27,7 @@ def get_data():
         elif addQuery[i+1] == 'true':
             query += " AND " + addQuery[i] + " = true"
     query += ";"
-    print(query)
+    #print(query)
 
     temp = ""
     conn = mysql.connector.connect(
@@ -50,15 +49,10 @@ def get_data():
 
 @app.route('/submission')
 def submission():
-    #print("2")
     return render_template('submission.html')
 
-# Serve the frontend
 @app.route('/')
-
 def index():
-    #print("1")
-    return render_template('index.html')  # Ensure 'index.html' is in a 'templates' folder
-
+    return render_template('index.html')
 if __name__ == '__main__':
     app.run(debug=True)
