@@ -22,18 +22,29 @@ for row in results:
 
 # Close the connection
 conn.close()
+
+
+
 app = Flask(__name__)
 
 # Example of a route that serves data
 @app.route('/get_data')
 def get_data():
+    #print("3")
     # Replace this with data fetched from your database or Python logic
     data = {"message":temp}
     return jsonify(data)
 
+@app.route('/submission')
+def submission():
+    #print("2")
+    return render_template('submission.html')
+
 # Serve the frontend
 @app.route('/')
+
 def index():
+    #print("1")
     return render_template('index.html')  # Ensure 'index.html' is in a 'templates' folder
 
 if __name__ == '__main__':
