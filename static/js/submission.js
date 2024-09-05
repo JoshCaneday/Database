@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () =>{
     const department_acronym = localStorage.getItem('department_acronym');
     const course_number = localStorage.getItem('course_number');
     const professor_first_name = localStorage.getItem('professor_first_name');
+    const professor_last_name = localStorage.getItem('professor_last_name');
     const offered_fall_2024 = localStorage.getItem('offered_fall_2024');
     let should_fetch = false;
     let user_input = ""
@@ -19,6 +20,11 @@ document.addEventListener("DOMContentLoaded", () =>{
     if (professor_first_name){
         document.getElementById('professor_first_name').textContent = `Professor First Name: ${professor_first_name}`;
         user_input = user_input + "p.prof_first_name," + professor_first_name + ",";
+        should_fetch = true;
+    }
+    if (professor_last_name){
+        document.getElementById('professor_last_name').textContent = `Professor Last Name: ${professor_last_name}`;
+        user_input = user_input + "p.prof_last_name," + professor_last_name + ",";
         should_fetch = true;
     }
     if (offered_fall_2024){
