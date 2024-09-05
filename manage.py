@@ -1,28 +1,13 @@
 import mysql.connector
 from flask import Flask, render_template, jsonify
 
-# Set up connection
+
 conn = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="mE2X6kP6!@#$",
-    database="ucsd_classes"
-)
-
-temp = ""
-# Create a cursor to interact with the database
-cursor = conn.cursor()
-
-# Example query
-cursor.execute("SELECT * FROM departments")
-results = cursor.fetchall()
-
-for row in results:
-    temp += str(row)
-
-# Close the connection
-conn.close()
-
+        host="localhost",
+        user="root",
+        password="mE2X6kP6!@#$",
+        database="ucsd_classes"
+    )
 
 
 app = Flask(__name__)
@@ -30,8 +15,23 @@ app = Flask(__name__)
 # Example of a route that serves data
 @app.route('/get_data')
 def get_data():
-    #print("3")
-    # Replace this with data fetched from your database or Python logic
+    temp = ""
+    cursor = conn.cursor()
+    cursor.execute('''
+                SELECT d.department_acronym AS 'Department', 
+                c.course_name AS 'Course Name', 
+                c.course_number AS '#', 
+                p.prof_first_name  AS 'First Name', 
+                p.prof_last_name AS 'Last Name' 
+                FROM courses c JOIN departments d JOIN professors p 
+                WHERE c.department_id = d.department_id AND c.fall_2024_prof_id = p.prof_id;
+            ''')
+    results = cursor.fetchall()
+
+    for row in results:
+        temp += str(row)
+
+    conn.close()
     data = {"message":temp}
     return jsonify(data)
 
