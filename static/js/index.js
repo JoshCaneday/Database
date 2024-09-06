@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('nameForm');
+    const form = document.getElementById('new_search');
     form.addEventListener('submit', (event) => {
         event.preventDefault();
         const department_acronym = document.getElementById('department_acronym').value;

@@ -1,5 +1,11 @@
 
 document.addEventListener("DOMContentLoaded", () =>{
+    const form = document.getElementById('new_search');
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        window.location.href = '/'
+    })
+
     const department_acronym = localStorage.getItem('department_acronym');
     const course_number = localStorage.getItem('course_number');
     const professor_first_name = localStorage.getItem('professor_first_name');
