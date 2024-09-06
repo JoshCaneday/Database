@@ -1,121 +1,67 @@
-use ucsd_classes;
+-- Create the database name ucsd_classes
+CREATE DATABASE ucsd_classes;
 
+-- Use the newly created database
+USE ucsd_classes;
 
-drop table if exists prereqs;
-drop table if exists courses;
-drop table if exists professors;
-drop table if exists departments;
-
-drop procedure if exists InsertDepartments;
-drop procedure if exists InsertProfessors;
-drop procedure if exists InsertCourses;
-drop procedure if exists InsertPrereqs;
-
-create table departments (
-	department_id int not null auto_increment,
-    department_acronym varchar(255) not null,
-    primary key (department_id)
+-- Create four tables within this database
+CREATE TABLE departments (
+	department_id INT NOT NULL auto_increment,
+    department_acronym VARCHAR(255) NOT NULL,
+    PRIMARY KEY (department_id)
 );
-create table professors (
-	prof_id int not null auto_increment,
-    department_id int not null,
-	prof_first_name varchar(255) not null,
-    prof_last_name varchar(255) not null,
-    primary key (prof_id),
-    foreign key (department_id) references departments(department_id)
+CREATE TABLE professors (
+	prof_id INT NOT NULL auto_increment,
+    department_id INT NOT NULL,
+	prof_first_name VARCHAR(255) NOT NULL,
+    prof_last_name VARCHAR(255) NOT NULL,
+    PRIMARY KEY (prof_id),
+    FOREIGN KEY (department_id) REFERENCES departments(department_id)
 );
-create table courses (
-	course_id int not null auto_increment,
-    course_name varchar(255) not null,
-    course_number varchar(255) not null,
-    is_offered_fall_2024 bool not null,
+CREATE TABLE courses (
+	course_id INT NOT NULL auto_increment,
+    course_name VARCHAR(255) NOT NULL,
+    course_number VARCHAR(255) NOT NULL,
+    is_offered_fall_2024 BOOLEAN NOT NULL,
     fall_2024_prof_id int,
-    department_id int not null,
-    primary key (course_id),
-    foreign key (department_id) references departments(department_id),
-    foreign key (fall_2024_prof_id) references professors(prof_id)
+    department_id int NOT NULL,
+    PRIMARY KEY (course_id),
+    FOREIGN KEY (department_id) REFERENCES departments(department_id),
+    FOREIGN KEY (fall_2024_prof_id) REFERENCES professors(prof_id)
 );
-create table prereqs (
-	prereq_id int not null auto_increment,
-    course_id int not null,
-    course_prereq_id int,
-    primary key (prereq_id),
-    foreign key (course_id) references courses(course_id),
-    foreign key (course_prereq_id) references courses(course_id)
+CREATE TABLE prereqs (
+	prereq_id INT NOT NULL auto_increment,
+    course_id INT NOT NULL,
+    course_prereq_id INT,
+    PRIMARY KEY (prereq_id),
+    FOREIGN KEY (course_id) REFERENCES courses(course_id),
+    FOREIGN KEY (course_prereq_id) REFERENCES courses(course_id)
 );
 
--- Go down and create the procedures that you dropped
-
--- INSERTION OF ALL DEPARTMENT NAMES BELOW
-call InsertDepartments();
-select * from departments;
 
 
+-- WAIT!!! Before going any further go down and create the four procedures, the first one begins at line 60
 
--- INSERTION OF ALL PROFESSORS
-call InsertProfessors();
-select * from professors limit 5978;
+-- Call this to insert all the department data into the departments table
+CALL InsertDepartments();
 
+-- Call this to insert all the professor data into the professors table
+CALL InsertProfessors();
 
--- INSERTION OF ALL COURSES
-call InsertCourses();
-select * from courses;
+-- Call this to insert all the course data into the courses table
+CALL InsertCourses();
 
--- MISC QUERIES FOR ABOVE
-delete from courses where course_id < 100;
--- give department name and course name for all courses under the department cse
-select c.course_name, d.department_acronym from courses c join departments d where c.department_id = d.department_id and d.department_acronym = "CSE";
--- give all courses and their department names
-select c.course_name, d.department_acronym from courses c join departments d where c.department_id = d.department_id;
+-- Call this to insert all the prereqs data into the prereqs table
+CALL InsertPrereqs();
 
-
-
--- INSERTION OF ALL PREREQS
-call InsertPrereqs();
-select * from prereqs;
-
-
--- Good Analyzation Queries:
-
--- If user wants to see all courses offered in 2024 (note the c.is_offered_fall_2024 = true is manual and would neet to be automated) as well as
--- the courses that are only CSE (again ntoe that the d.department_acronym = "CSE" is manual as well and would also need to be automated)
--- All CSE courses in Fall 2024
-select d.department_acronym as "Department", c.course_name as "Course Name", c.course_number as "#" from courses c join departments d 
-where c.department_id = d.department_id and c.is_offered_fall_2024 = true and d.department_acronym = "CSE";
-
--- If user wants to see all prerequiste courses for the couse with the id of 3 (done manually but will need to be automated), also they wont choose
--- id of 3, they will chose the course and the course name will be mapped to the respective id
--- All prerequisites of COGS 118B (respective course id)
-select d.department_acronym as "Department", c.course_name as "Prerequisite Course", c.course_number as "#"
-from courses c join prereqs p join departments d where d.department_id = c.department_id and p.course_prereq_id = c.course_id and p.course_id = 20;
-
--- If...
--- All classes taught by Greg Miranda or Joseph Politz in Fall 2024
-select p.prof_first_name as "First Name", p.prof_last_name as "Last Name", c.course_name as "Course Name", c.course_number as "#"
-from courses c join professors p
-where c.is_offered_fall_2024 = true and p.prof_id = c.fall_2024_prof_id and ((p.prof_first_name = "Mor Mia" and p.prof_last_name = "Minnes Kemp") 
-or (p.prof_first_name = "Joseph Gibbs" and p.prof_last_name = "Politz"));
-
--- If...
--- All professors teaching in Fall 2024
-select p.prof_first_name as "First Name", p.prof_last_name as "Last Name" from professors p join courses c where p.prof_id = c.fall_2024_prof_id;
-
-
-select d.department_acronym as "Department", c.course_name as "Course Name", c.course_number as "#" , p.prof_first_name  as "First Name",
-p.prof_last_name as "Last Name" from courses c join departments d join professors p
-where c.department_id = d.department_id and c.fall_2024_prof_id = p.prof_id and c.is_offered_fall_2024 = true and d.department_acronym = "CSE";
-
-select d.department_acronym as "Department", c.course_name as "Course Name", c.course_number as "#" , p.prof_first_name  as "First Name",
-p.prof_last_name as "Last Name" from departments d join courses c left join professors p on c.fall_2024_prof_id = p.prof_id
-where c.department_id = d.department_id and c.course_number = 12;
-
+-- Now you are finished and should be able to run the code!
 
 
 Delimiter //
-create procedure InsertDepartments()
-begin
-insert into departments (department_acronym)
-values 
+CREATE PROCEDURE InsertDepartments()
+BEGIN
+INSERT INTO departments (department_acronym)
+VALUES 
 ('AIP'),('AAS'),('AWP'),('ANES'),('ANBI'),('ANAR'),
 ('ANTH'),('ANSC'),('AESE'),('AAPI'),('ASTR'),('AUD'),
 ('BENG'),('BNFO'),('BIEB'),('BICD'),('BIPN'),('BIBC'),
@@ -147,13 +93,13 @@ values
 ('SYN'),('TDAC'),('TDDE'),('TDDR'),('TDGE'),('TDGR'),
 ('TDHT'),('TDPW'),('TDPR'),('USP'),('UROL'),('VIS'),
 ('WARR'),('WCWP'),('WES');
-end //
+END //
 
 Delimiter //
-create procedure InsertProfessors()
-begin
-insert into professors (department_id, prof_last_name, prof_first_name)
-values
+CREATE PROCEDURE InsertProfessors()
+BEGIN
+INSERT INTO professors (department_id, prof_last_name, prof_first_name)
+VALUES
 (39,'Aamari','Eddie'),
 (39,'Aarons','Sarah Miranda'),
 (39,'Abagyan','Ruben'),
@@ -6132,13 +6078,13 @@ values
 (39,'Zwicker','Matthias Beat'),
 (39,'Zygmonski','Aimee L'),
 (39,'Zyskowski','Colin A');
-end //
+END //
 
 Delimiter //
-create procedure InsertCourses()
-begin
-insert into courses (course_name, course_number, is_offered_fall_2024, fall_2024_prof_id, department_id)
-values
+CREATE PROCEDURE InsertCourses()
+BEGIN
+INSERT INTO courses (course_name, course_number, is_offered_fall_2024, fall_2024_prof_id, department_id)
+VALUES
 -- CSE
 ('Intr/CompSci&amp;Obj-Ori:Python','6R',False,null,39),
 ('Intro to Programming 1','8A',True,4951,39),
@@ -6400,183 +6346,13 @@ values
 ('Probability and Statistics for Bioinformatics','186',False,null,124),
 ('Abstract Algebra I','100A',True,4160,124),
 ('Modern Algebra I','103A',True,5086,124);
-end //
--- MATH
-/*
-('Intro to College Mathematics',' 2',True,??,124),
-('Precalculus',' 3C',True,??,124),
-('Precalculus for Sci &amp; Engn',' 4C',True,??,124),
-('Calculus I',' 10A',True,??,124),
-('Calculus II',' 10B',True,??,124),
-('Calculus III',' 10C',True,??,124),
-('Calculus-Based Prob &amp; Stats',' 11',True,??,124),
-('Linear Algebra',' 18',True,??,124),
-('Calculus/Science &amp; Engineering',' 20A',True,??,124),
-('Calculus/Science &amp; Engineering',' 20B',True,??,124),
-('Calculus&amp;Analyt Geom/Sci&amp;Engnr',' 20C',True,??,124),
-('Intro/Differential Equations',' 20D',True,??,124),
-('Vector Calculus',' 20E',True,??,124),
-('Honors Linear Algebra',' 31AH',True,??,124),
-('Honors Multivariable Calculus',' 31BH',True,??,124),
-('Honors Vector Calculus',' 31CH',True,??,124),
-('First-year Seminar',' 87',True,??,124),
-('Introduction to Teaching Math',' 95',True,??,124),
-('Putnam Seminar',' 96',True,??,124),
-('Abstract Algebra I',' 100A',True,??,124),
-('Abstract Algebra II',' 100B',True,??,124),
-('Abstract Algebra III',' 100C',True,??,124),
-('Applied Linear Algebra',' 102',True,??,124),
-('Modern Algebra I',' 103A',True,??,124),
-('Modern Algebra II',' 103B',True,??,124),
-('Number Theory I',' 104A',True,??,124),
-('Number Theory II',' 104B',True,??,124),
-('Basic Number Theory',' 105',True,??,124),
-('Intro/Algebraic Geometry',' 106',True,??,124),
-('Mathematical Reasoning',' 109',True,??,124),
-('Intro/Partial Diff Equations',' 110',True,??,124),
-('Mathematical Modeling I',' 111A',True,??,124),
-('Intro/Mathematical Biology I',' 112A',True,??,124),
-('Intro/Mathematical Biology II',' 112B',True,??,124),
-('Elements of Complex Analysis',' 120A',True,??,124),
-('Applied Complex Analysis',' 120B',True,??,124),
-('Found of Teachg/Learng Math I',' 121A',True,??,124),
-('Found of Teachg/Learng Math II',' 121B',True,??,124),
-('Diff Eqs &amp; Dynamical Systems',' 130',True,??,124),
-('Foundations of Real Analysis I',' 140A',True,??,124),
-('Foundations/Real Analysis II',' 140B',True,??,124),
-('Foundations/Real Analysis III',' 140C',True,??,124),
-('Introduction to Analysis I',' 142A',True,??,124),
-('Introduction to Analysis II',' 142B',True,??,124),
-('Intro to Fourier Analysis',' 144',True,??,124),
-('Analysis of Partial Diff Eqs',' 148',True,??,124),
-('Differential Geometry',' 150A',True,??,124),
-('Calculus on Manifolds',' 150B',True,??,124),
-('Applicable Math and Computing',' 152',True,??,124),
-('Geometry for Secondary Teacher',' 153',True,??,124),
-('Discrete Math &amp; Graph Theory',' 154',True,??,124),
-('Extremal Combinatorics/Graph',' 158',True,??,124),
-('History of Mathematics',' 163',True,??,124),
-('Topics/Applied Math-Comp Sci',' 168A',True,??,124),
-('Intro Numerical Analys/Linear',' 170A',True,??,124),
-('Intro/Numerical Analy/Approxim',' 170B',True,??,124),
-('Intro Numerical Analy/Ord Diff',' 170C',True,??,124),
-('Intro Num Optimiz/Linear Prog',' 171A',True,??,124),
-('Intro Num Optimiz/Nonlinear',' 171B',True,??,124),
-('Optimization/Data Science I',' 173A',True,??,124),
-('Optimization/Data Science II',' 173B',True,??,124),
-('Numericl Methods/Physcl Modlng',' 174',True,??,124),
-('Numerical Methods for PDE',' 175',True,??,124),
-('Introduction to Probability',' 180A',True,??,124),
-('Intro/Stochastic Processes I',' 180B',True,??,124),
-('Intro/Stochastic Processes II',' 180C',True,??,124),
-('Intro/Math Statistics I',' 181A',True,??,124),
-('Intro/Math Statistics II',' 181B',True,??,124),
-('Hidden Data in Random Matrices',' 182',True,??,124),
-('Statistical Methods',' 183',True,??,124),
-('Enumerative Combinatorics',' 184',True,??,124),
-('Intro to Computational Stats',' 185',True,??,124),
-('Probablty Stats/Bioinformatics',' 186',True,??,124),
-('Introduction to Cryptography',' 187A',True,??,124),
-('Math of Modern Cryptography',' 187B',True,??,124),
-('Algebraic Combinatorics',' 188',True,??,124),
-('Data Analysis and Inference',' 189',True,??,124),
-('Foundations of Topology I',' 190A',True,??,124),
-('Actuarial Mathematics I',' 193A',True,??,124),
-('Actuarial Mathematics II',' 193B',True,??,124),
-('The Mathematics of Finance',' 194',True,??,124),
--- MAE
-('Intro to Aerospace Engineering','2',True,??,126),
-('Intro to Mechanical Design','3',True,??,126),
-('MATLAB Program for Engr Analys','8',True,??,126),
-('Thermodynamics','11',True,??,126),
-('Elements of Materials Science','20',True,??,126),
-('Aerospace Materials Science','21',True,??,126),
-('Statics &amp; Intro to Dynamics','30A',True,??,126),
-('Dynamics and Vibrations','30B',True,??,126),
-('Linear Circuits','40',True,??,126),
-('Design Compet/Design Race Car','93',True,??,126),
-('Introductory Fluid Mechanics','101A',True,??,126),
-('Advanced Fluid Mechanics','101B',True,??,126),
-('Heat Transfer','101C',True,??,126),
-('Intermediate Heat Transfer','101D',True,??,126),
-('Aerodynamics','104',True,??,126),
-('Intro to Mathematical Physics','105',True,??,126),
-('Computational Methods/Engineer','107',True,??,126),
-('Prob &amp; Stats/Method/Mech Eng','108',True,??,126),
-('Thermodynamic Systems','110',True,??,126),
-('Fundamentals of Propulsion','113',True,??,126),
-('Intro to Energy &amp; Environment','118',True,??,126),
-('Intro Renew Energ/Solar &amp; Wind','119',True,??,126),
-('Introduction to Nuclear Energy','120',True,??,126),
-('Flow &amp; Transport/Environment','122',True,??,126),
-('Intro/Transprt in Porous Media','123',True,??,126),
-('Building Energy Efficiency','125',True,??,126),
-('Advanced Vibrations','130',True,??,126),
-('Solid Mechanics I','131A',True,??,126),
-('Solid Mechanics II','131B',True,??,126),
-('Dynmcs&amp;Control/Aerospace Vehic','142',True,??,126),
-('Signals and Systems','143A',True,??,126),
-('Linear Control','143B',True,??,126),
-('Embedded Control &amp; Robotics','144',True,??,126),
-('Robotic Planning &amp; Estimation','145',True,??,126),
-('Intro to Autonomous Vehicles','148',True,??,126),
-('Computational Methods/Design','150',True,??,126),
-('Intro Manual and CNC Machining','152',True,??,126),
-('Prod. Desgn. &amp; Entrepreneur.','154',True,??,126),
-('Aerospace Engineering Design I','155A',True,??,126),
-('Aerospace Engineering Desgn II','155B',True,??,126),
-('Fund. Prin./Mechanical Desgn I','156A',True,??,126),
-('Fund. Prin/Mechanical Desgn II','156B',True,??,126),
-('Mechanical Behavior/Materials','160',True,??,126),
-('Modern Concepts/Nanotechnology','166',True,??,126),
-('Experimental Techniques','170',True,??,126),
-('Mechanical Engineering Lab I','171A',True,??,126),
-('Aerospace Engineering Lab','175A',True,??,126),
-('Orbital Mechanics','180',True,??,126),
-('Spacecraft Guidance I','180A',True,??,126),
-('Space Mission Analysis/Design','181',True,??,126),
-('Spacecraft Guidance&amp;Navigation','182',True,??,126),
-('Flight Simulation Techniques','184',True,??,126),
-('Computational Fluid Mechanics','185',True,??,126),
-('Topics in Mech and Aero Eng','190',True,??,126),
-('Topics in Mech &amp; Aero Lab','191',True,??,126),
--- DSC
-('Principles of Data Science','10',True,??,48),
-('Prgrmng/DataStruc for Data Sci','20',True,??,48),
-('DataStrc/Algrthms for Data Sci','30',True,??,48),
-('Theor Fndtns of Data Sci I','40A',True,??,48),
-('Theor Fndtns of Data Sci II','40B',True,??,48),
-('Practice of Data Science','80',True,??,48),
-('Tutor Appshp in Data Science','95',True,??,48),
-('Workshop in Data Science','96',True,??,48),
-('Intro to Data Management','100',True,??,48),
-('Systems for Scalable Analytics','102',True,??,48),
-('Intro to Data Visualization','106',True,??,48),
-('Signal Processing/Data Analys','120',True,??,48),
-('Probabilistic Modeling and ML','140A',True,??,48),
-('Representation Learning','140B',True,??,48),
-('Introduction to Data Mining','148',True,??,48),
-('Hidden Data in Random Matrices','155',True,??,48),
-('Text as Data','161',True,??,48),
-('Spatial Data Science and Appl','170',True,??,48),
-('Data Science Project I','180A',True,??,48),
-('Data Science Project II','180B',True,??,48),
-('Topics in Data Science','190',True,??,48),
--- Other
--- (Add prereqs of the classes above here)
-('Design of Everyday Things',' 1',True,??,51),
-('Designing Your Future Self',' 2',True,??,51),
-('Prototyping',' 100',True,??,51),
-('Dsgn Creativity/Productivity',' 118',True,??,51),
-('Design at Large',' 119',True,??,51),
-('Special Topics in Design',' 160',True,??,51);
-end //
-*/
+END //
+
 Delimiter //
-create procedure InsertPrereqs()
-begin
-insert into prereqs(course_id, course_prereq_id)
-values
+CREATE PROCEDURE InsertPrereqs()
+BEGIN
+INSERT INTO prereqs(course_id, course_prereq_id)
+VALUES
 (6,3),(6,4),(7,3),(7,4),(7,6),(7,226),(8,1),(8,2),(8,3),(8,4),(8,162),(9,8),(9,232),(9,240),(10,3),(10,4),(10,162),(12,7),
 (12,10),(12,162),(20,9),(20,245),(20,246),(20,251),(20,252),(20,6),(20,7),(20,12),(20,162),
 (21,9),(21,245),(21,246),(21,251),(21,252),(21,6),(21,7),(21,12),(21,162),
@@ -6605,4 +6381,4 @@ values
 (58,6),(58,228),(58,7),(58,229),(58,24),(58,177),(58,231),(58,247),(58,250),(58,237),(58,233),(58,238),
 (58,230),(58,249),(58,254),(59,20),(59,21),(60,62),(61,20),(61,21),(61,228),(61,233),(61,238),(61,229),
 (62,20),(62,21),(63,62),(64,62),(65,101),(65,6),(65,226),(65,77),(65,82),(67,29),(67,65),(67,111);
-end //
+END //
