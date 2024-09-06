@@ -7,7 +7,7 @@ from flask import Flask, render_template, jsonify, request
 
 
 app = Flask(__name__)
-# ooog
+
 @app.route('/get_data', methods=['POST'])
 def get_data():
     reqData = request.json;
