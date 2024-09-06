@@ -8,27 +8,27 @@ document.addEventListener("DOMContentLoaded", () =>{
     let should_fetch = false;
     let user_input = ""
     if (department_acronym){
-        document.getElementById('department_acronym').textContent = `Department: ${department_acronym}`;
+        document.getElementById('department_acronym').textContent = `${department_acronym}`;
         user_input = user_input + "d.department_acronym," + department_acronym + ",";
         should_fetch = true;
     }
     if (course_number){
-        document.getElementById('course_number').textContent = `Course Number: ${course_number}`;
+        document.getElementById('course_number').textContent = `${course_number}`;
         user_input = user_input + "c.course_number," + course_number + ",";
         should_fetch = true;
     }
     if (professor_first_name){
-        document.getElementById('professor_first_name').textContent = `Professor First Name: ${professor_first_name}`;
+        document.getElementById('professor_first_name').textContent = `${professor_first_name}`;
         user_input = user_input + "p.prof_first_name," + professor_first_name + ",";
         should_fetch = true;
     }
     if (professor_last_name){
-        document.getElementById('professor_last_name').textContent = `Professor Last Name: ${professor_last_name}`;
+        document.getElementById('professor_last_name').textContent = `${professor_last_name}`;
         user_input = user_input + "p.prof_last_name," + professor_last_name + ",";
         should_fetch = true;
     }
     if (offered_fall_2024){
-        document.getElementById('offered_fall_2024').textContent = `Fall 2024: ${offered_fall_2024}`;
+        document.getElementById('offered_fall_2024').textContent = `${offered_fall_2024}`;
         user_input = user_input + "c.is_offered_fall_2024," + offered_fall_2024 + ",";
         should_fetch = true;
     }
@@ -51,9 +51,9 @@ document.addEventListener("DOMContentLoaded", () =>{
                 }
                 counter += 1;
 
-                const th = document.createElement('th');
-                th.textContent = item;
-                curRow.appendChild(th);
+                const td = document.createElement('td');
+                td.textContent = item;
+                curRow.appendChild(td);
             });
         })
         .catch(error => console.error('Error fetching data:', error));

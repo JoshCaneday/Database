@@ -15,18 +15,24 @@
         </div>
         <div class="main">
             <span class="box">
-                <p>
-                    Welcome to the Finance Manager! Here you can manage any financial information that can be difficult to organize in a easy-to-use
-                    and flexible format. More information to come... waht what waht what waht what waht what waht what waht what waht what waht what 
-                    waht what waht what waht what waht what waht what waht what
-                </p>
-                <p id="department_acronym">Department: None Selected</p>
-                <p id="course_number">Course Number: None Selected</p>
-                <p id="professor_first_name">Professor First Name: None Selected</p>
-                <p id="professor_last_name">Professor Last Name: None Selected</p>
-                <p id="offered_fall_2024">Fall 2024 Only: None Selected</p>
-                <p id="message">uh oh</p>
-                <table id="table">
+                <table class="choice">
+                    <tr class= "choice_header">
+                        <th>Department</th>
+                        <th>Only Fall 2024</th>
+                        <th>Course #</th>
+                        <th>Professor First Name</th>
+                        <th>Professor Last Name</th>
+                    </tr>
+                    <tr>
+                        <td id="department_acronym">N/A</td>
+                        <td id="offered_fall_2024">N/A</td>
+                        <td id="course_number">N/A</td>
+                        <td id="professor_first_name">N/A</td>
+                        <td id="professor_last_name">N/A</td>
+                    </tr>
+                </table>
+                <p id="message" class="message">uh oh</p>
+                <table id="table" class="table">
                     <tr>
                         <th>Department</th>
                         <th>Course Name</th>
@@ -38,7 +44,6 @@
 
                     </tr>
                 </table>
-                <ul id="items"></ul>
             </span>
         </div>
     </body>

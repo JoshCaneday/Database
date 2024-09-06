@@ -41,15 +41,22 @@ def get_data():
     results = cursor.fetchall()
 
     for row in results:
+        print(row)
         observation = str(row)[1:-1].split(',')
         for i in observation:
+            # specific to how the the fetch returns the string
             if i[0] == "'":
                 temp.append(i[1:-1])
+            elif i[0] == " ":
+                if i[1] == "'":
+                    temp.append(i[2:-1])
+                else:
+                    temp.append(i[1:])
             else:
                 temp.append(i)
 
     conn.close()
-    data = {"message":"Here are the Items:","table":temp}
+    data = {"message":"All Courses Given the Provided Information:","table":temp}
     return jsonify(data)
 
 @app.route('/submission')
