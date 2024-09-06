@@ -1,4 +1,5 @@
 import mysql.connector
+import os
 from flask import Flask, render_template, jsonify, request
 
 
@@ -31,17 +32,17 @@ def get_data():
 
     temp = []
     conn = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="mE2X6kP6!@#$",
-        database="ucsd_classes"
+        host=os.getenv("DB_HOST"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        database=os.getenv("DB_DATABASE")
     )
     cursor = conn.cursor()
     cursor.execute(query)
     results = cursor.fetchall()
 
     for row in results:
-        print(row)
+        #print(row)
         observation = str(row)[1:-1].split(',')
         for i in observation:
             # specific to how the the fetch returns the string
