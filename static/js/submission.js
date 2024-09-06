@@ -36,7 +36,25 @@ document.addEventListener("DOMContentLoaded", () =>{
         fetch('/get_data', {method: 'POST',headers: {'Content-Type': 'application/json',}, body: JSON.stringify({input: user_input})})
         .then(response => response.json())
         .then(data => {
+            // temp = data.message;
+
             document.getElementById('message').textContent = data.message;
+            const itemsList = document.getElementById('table');
+            let curRow = document.getElementById('startingRow');
+            let counter = 0;
+            data.table.forEach(item => {
+                if (counter == 5) {
+                    counter = 0;
+                    const tr = document.createElement('tr');
+                    itemsList.appendChild(tr);
+                    curRow = tr
+                }
+                counter += 1;
+
+                const th = document.createElement('th');
+                th.textContent = item;
+                curRow.appendChild(th);
+            });
         })
         .catch(error => console.error('Error fetching data:', error));
     }

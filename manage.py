@@ -29,7 +29,7 @@ def get_data():
     query += ";"
     #print(query)
 
-    temp = ""
+    temp = []
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
@@ -41,10 +41,15 @@ def get_data():
     results = cursor.fetchall()
 
     for row in results:
-        temp += str(row)
+        observation = str(row)[1:-1].split(',')
+        for i in observation:
+            if i[0] == "'":
+                temp.append(i[1:-1])
+            else:
+                temp.append(i)
 
     conn.close()
-    data = {"message":temp}
+    data = {"message":"Here are the Items:","table":temp}
     return jsonify(data)
 
 @app.route('/submission')

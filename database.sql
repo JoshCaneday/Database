@@ -6214,7 +6214,7 @@ values
 ('Top/Computer Sci &amp; Engineering','190',True,960,39),
 ('Semnr/Computer Sci &amp; Engineer','191',True,3536,39),
 ('Introduction to CS Research','193',True,508,39),
-('Race, Gender &amp; Computing','194',False,null,39),
+('Race Gender &amp; Computing','194',False,null,39),
 ('Field Study/Computer Sci&Engin','197',True,3536,39),
 -- COGS
 ('Introduction to Cognitive Sci','1',True,349,35),
