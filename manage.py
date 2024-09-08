@@ -52,7 +52,7 @@ def get_data():
                 if i[1] == "'":
                     temp.append(i[2:-1])
                 else:
-                    temp.append(i[1:])
+                    temp.append("N/A") # This is where the null professor names occur, to which I assigned them as 'N/A'
             else:
                 temp.append(i)
 
