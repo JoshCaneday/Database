@@ -76,7 +76,7 @@ Ensure that you have the following installed:
 6. **Run the Flask server**:
    - Start the Flask server to serve the application:
      ```bash
-     flask run
+     python manage.py
      ```
 
 7. **Access the application**:
