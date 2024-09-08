@@ -56,15 +56,23 @@ Ensure that you have the following installed:
    - Create a new MySQL database for storing UCSD course data.
    - Import the database schema and sample data (if available):
      ```bash
-     mysql -u yourusername -p yourdatabase < schema.sql
+     mysql -u yourusername -p yourdatabase < ucsd_courses.sql
      ```
 
 5. **Configure Flask**:
-   - Update the `config.py` file with your MySQL database connection information:
-     ```python
-     SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://username:password@localhost/ucsd_classes'
+   - Update the flask file with your MySQL database connection information:
+     ```bash
+     export DB_HOST='yourhostname'
      ```
-
+      ```bash
+     export DB_USER='yourusername'
+     ```
+      ```bash
+     export DB_PASSWORD='yourpasswordname'
+     ```
+      ```bash
+     export DB_DATABASE='yourdatabasename'
+     ```
 6. **Run the Flask server**:
    - Start the Flask server to serve the application:
      ```bash
