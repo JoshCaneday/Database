@@ -62,7 +62,7 @@ Ensure that you have the following installed:
 5. **Configure Flask**:
    - Update the `config.py` file with your MySQL database connection information:
      ```python
-     SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://username:password@localhost/ucsd_courses'
+     SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://username:password@localhost/ucsd_classes'
      ```
 
 6. **Run the Flask server**:
