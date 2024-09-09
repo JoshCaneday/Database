@@ -62,10 +62,12 @@ def get_data():
 
 @app.route('/submission')
 def submission():
-    return render_template('submission.html')
+    with open('submission.html', 'r') as f:
+        return f.read()
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    with open('index.html', 'r') as f:
+        return f.read()
 if __name__ == '__main__':
     app.run(debug=True)
