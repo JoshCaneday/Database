@@ -23,7 +23,7 @@ def get_data():
             '''
     addQuery = user_input.split(',')
     for i in range(0,len(addQuery)-1,2):
-        if addQuery[i] != "c.is_offered_fall_2024" and addQuery[i+1] != '':
+        if addQuery[i] != "c.is_offered_fall_2024" and addQuery[i+1] != '': 
             query += " AND " + addQuery[i] + " = '" + addQuery[i+1] + "'"
         elif addQuery[i+1] == 'true':
             query += " AND " + addQuery[i] + " = true"
@@ -62,12 +62,10 @@ def get_data():
 
 @app.route('/submission')
 def submission():
-    with open('submission.html', 'r') as f:
-        return f.read()
+    return render_template('submission.html')
 
 @app.route('/')
 def index():
-    with open('index.html', 'r') as f:
-        return f.read()
+    return render_template('index.html')
 if __name__ == '__main__':
     app.run(debug=True)
