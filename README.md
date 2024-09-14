@@ -1,6 +1,6 @@
 # UCSD Course Finder
 
-[**UCSD Course Finder**](http://ec2-3-145-214-87.us-east-2.compute.amazonaws.com/) is a web-based project that enables users to query and find information about courses offered at the University of California, San Diego (UCSD). The website is built with **HTML**, **CSS**, and **JavaScript** for the frontend, while the backend is powered by **Python/Flask** and **MySQL**. The MySQL database stores key course data, including:
+[**UCSD Course Finder**](http://ec2-3-145-214-87.us-east-2.compute.amazonaws.com/) is a web-based project that enables users to query and find information about courses offered at the University of California, San Diego (UCSD). The website is built with **HTML**, **CSS**, and **JavaScript** for the frontend, while the backend is powered by **Python/Flask** and **MySQL**. The website is being hosted with AWS EC2 and the database is being handled by AWS RDS. The MySQL database stores key course data, including:
 
 - Courses offered for **Fall 2024**
 - Professors teaching each course
